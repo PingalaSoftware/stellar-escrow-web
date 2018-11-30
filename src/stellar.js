@@ -11,7 +11,11 @@ export const createContract = async function (pub1, pub2, amount, pub1Secret) {
     const escrowKeypair = Stellar.Keypair.random();
     const pub1Keypair = Stellar.Keypair.fromSecret(pub1Secret);
 
-    // Create an Escrow account with base funds
+    /**
+     * Create an Escrow account with base funds 
+     * 
+     * */
+
     // var pub1Account = await server.loadAccount(pub1)
     // const createEscrowTrx = new Stellar.TransactionBuilder(pub1Account)
     //     .addOperation(Stellar.Operation.createAccount({
@@ -92,7 +96,6 @@ export const createContract = async function (pub1, pub2, amount, pub1Secret) {
     const dateAfter15min = moment().add('15', 'm').unix();
     const dateAfter30min = moment().add('30', 'm').unix();
 
-    console.log(dateAfter5min);
     /**
      *  Transaction from escrow account to Pub2 account with half of the funds
      *  after 5 mins only
@@ -153,7 +156,6 @@ export const createContract = async function (pub1, pub2, amount, pub1Secret) {
 export const signEnvelope = function(envelope, secret){
     var keypair = Stellar.Keypair.fromSecret(secret);
     const transaction = new Stellar.Transaction(envelope);
-    // const transaction = Stellar.xdr.TransactionEnvelope.fromXDR(envelope, 'base64');
     transaction.sign(keypair);
 
     return transaction.toEnvelope().toXDR().toString("base64");
