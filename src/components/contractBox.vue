@@ -54,7 +54,7 @@
             </v-layout>
           </div>
         </div>
-        <create-contract v-if="!envelops.envelope1"></create-contract>
+        <create-contract v-if="!envelops.envelope1" :accountPublic="accountPublic"></create-contract>
       </v-card-text>
     </v-card>
   </v-layout>
@@ -66,7 +66,7 @@ import sign from '../components/sign'
 import { submitTransaction } from '../stellar.js'
 
 export default {
-  props: ["envelops"],
+  props: ["envelops", "accountPublic"],
   data: () => ({
     error: ""
   }),

@@ -1,8 +1,11 @@
 <template>
   <v-container>
     <v-layout column align-center>
+      <v-flex v-if="accountPublic">
+        <contract-box :envelops="envelops" :accountPublic="accountPublic"></contract-box>
+      </v-flex>
       <v-flex>
-        <contract-box :envelops="envelops"></contract-box>
+        <login v-if="!accountPublic"></login>
       </v-flex>
     </v-layout>
     <v-layout>
@@ -15,6 +18,7 @@
 
 <script>
 import contractBox from "../components/contractBox.vue";
+import login from "../components/Login"
 import axios from "../axios.js";
 
 export default {
@@ -23,13 +27,15 @@ export default {
       envelope1: "",
       envelope2: "",
       envelope3: ""
-    }
+    },
+    accountPublic: ""
   }),
   mounted() {
     this.loadContract();
   },
   components: {
-    contractBox
+    contractBox,
+    login
   },
 
   methods: {
@@ -49,6 +55,9 @@ export default {
 
   created(){
     this.$eventHub.$on('loadContract', this.loadContract);
+    this.$eventHub.$on('login', (accountPublic)=> {
+      this.accountPublic = accountPublic;
+    });
   },
   beforeDestroy() {
     this.$eventHub.$off('loadContract');

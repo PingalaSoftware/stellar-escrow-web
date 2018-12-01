@@ -7,7 +7,7 @@
         <v-card-title class="headline grey lighten-2" primary-title>Escrow Contract</v-card-title>
         <div class="pa-3">
           <v-form ref="form" v-model="valid" lazy-validation>
-            <v-text-field v-model="pub1" :rules="pubRules" label="your public key" required></v-text-field>
+            <v-text-field v-model="accountPublic"  disabled label="your public key" required></v-text-field>
 
             <v-text-field v-model="pub2" :rules="pubRules" label="other party public key" required></v-text-field>
 
@@ -29,6 +29,7 @@ import { createContract } from "../stellar.js";
 import axios from "../axios.js";
 
 export default {
+  props: ["accountPublic"],
   data: () => ({
     dialog: false,
     valid: false,
@@ -41,12 +42,12 @@ export default {
   }),
   methods: {
     submit() {
-        this.valid = false;
-      createContract(this.pub1, this.pub2, this.amount, this.pub1Secret).then(
+      this.valid = false;
+      createContract(this.accountPublic, this.pub2, this.amount, this.pub1Secret).then(
         ({ envelope1, envelope2, envelope3 }) => {
           axios
             .post("api/contract", {
-              pub1: this.pub1,
+              pub1: this.accountPublic,
               pub2: this.pub2,
               envelope1,
               envelope2,
@@ -54,7 +55,7 @@ export default {
             })
             .then(() => {
               console.log("success");
-              this.$eventHub.$emit('loadContract');
+              this.$eventHub.$emit("loadContract");
               this.valid = true;
               this.dialog = false;
             })
